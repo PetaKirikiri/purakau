@@ -16,6 +16,7 @@ import { MdDragIndicator } from 'react-icons/md'
 
 type SentencePattern = { id: number; name: string; pos_blueprint: number[] }
 type ChunkPattern = { name: string; sequence: number[] }
+type DraftPhrasePattern = { id: number | string; name: string; pos_pattern?: { sequence?: number[] } }
 type PosType = { id: number; code?: string; label?: string; color?: string | null }
 
 export type SentenceRowProps = {
@@ -53,7 +54,7 @@ export type SentenceRowProps = {
     onAddToPage: () => void
     isAddToPagePending?: boolean
     isAddToPageDisabled?: boolean
-    phrasePatterns: ChunkPattern[]
+    phrasePatterns: DraftPhrasePattern[]
     sentencePatterns: SentencePattern[]
     wordsByPos: Record<number, string[]>
   }

@@ -5,6 +5,7 @@
 
 import type {
   PatternQuestionConfig,
+  PatternQuestionVariant,
   PatternQuestionWhen,
   SentencePatternPhraseComponent,
   SentenceToken,

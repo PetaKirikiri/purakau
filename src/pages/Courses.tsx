@@ -81,12 +81,6 @@ function orderExactSearchFirst<T>(
   return [...exact, ...rest]
 }
 
-/** bigserial / PostgREST can surface row ids as string; keep comparisons stable vs React state number. */
-function cwRowIdEq(a: unknown, b: unknown): boolean {
-  if (a == null || b == null) return false
-  return Number(a) === Number(b)
-}
-
 /** Minimal export: POS label (or code) → list of `word_text`, sorted by POS name then word. */
 function buildCourseVocabularyExportJson(rows: CourseWordRow[], posTypes: PosType[]): string {
   const labelById = new Map(posTypes.map((p) => [p.id, p.label]))
@@ -1436,7 +1430,7 @@ export default function Courses() {
                           }
                           const resolved = resolveToken(tokenForTab, posTypes)
                           const aq = teAkaCourseWordQueries[i]
-                          const audioPending = aq?.isPending
+                          const audioPending = aq?.isPending ?? false
                           const audioYes = aq?.data === true
                           const rowCourseName =
                             courses?.find((c) => Number(c.id) === Number(r.course_id))?.name ??
@@ -1522,7 +1516,7 @@ export default function Courses() {
                             j < teAkaHasPosSlots
                               ? teAkaCourseWordQueries[courseWordsDisplayedFiltered.length + j]
                               : undefined
-                          const audioPending = aq?.isPending
+                          const audioPending = aq?.isPending ?? false
                           const audioYes = aq?.data === true
                           const addDisabled =
                             addCourseWordsMutation.isPending || activeCourseId == null
@@ -1590,7 +1584,7 @@ export default function Courses() {
                                   courseWordsDisplayedFiltered.length + teAkaHasPosSlots + k
                                 ]
                               : undefined
-                          const audioPending = aq?.isPending
+                          const audioPending = aq?.isPending ?? false
                           const audioYes = aq?.data === true
                           const tagAddDisabled =
                             addCustomWordToCourseMutation.isPending || activeCourseId == null

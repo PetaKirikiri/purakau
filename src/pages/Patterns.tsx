@@ -57,7 +57,7 @@ function findPhraseSpanForVariant(
   if (!phraseSpans.length) return null
   const rep = v.replace_span ?? (v.slot_index != null ? { start: v.slot_index, end: v.slot_index } : null)
   const cfgRep =
-    cfg.replace_span ?? (cfg.slot_index != null ? { start: cfg.slot_index, end: cfg.replace_span?.end ?? cfg.slot_index } : null)
+    cfg.replace_span ?? (cfg.slot_index != null ? { start: cfg.slot_index, end: cfg.slot_index } : null)
   const effRep = rep ?? cfgRep
   const focus = effRep?.start ?? v.slot_index ?? cfg.slot_index
   const name = v.when?.in_phrase_name

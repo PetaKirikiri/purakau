@@ -276,7 +276,7 @@ export function CourseLessonsPanel({
             const rk = rankOf(w.word_text)
             const rankLabel = rk != null ? String(rk) : '?'
             const aq = i < teAkaLessonQueries.length ? teAkaLessonQueries[i] : undefined
-            const audioPending = aq?.isPending
+            const audioPending = aq?.isPending ?? false
             const audioYes = aq?.data === true
             const scheduled = lessonByKey.get(vocabKey(w.word_text, w.pos_type_id)) ?? null
             return (

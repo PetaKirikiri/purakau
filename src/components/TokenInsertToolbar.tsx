@@ -7,7 +7,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { getPosTypeBackgroundColor } from '../lib/tokenStyling'
 import type { SentenceToken } from '../db/schema'
 
-type PosType = { id: number; code: string; label: string; color?: string | null }
+type PosType = { id: number; code?: string; label?: string; color?: string | null }
 type PhrasePattern = { id: number | string; name: string; pos_pattern?: { sequence?: number[] } }
 type SentencePattern = { id: number; name: string; pos_blueprint?: number[] }
 
@@ -63,7 +63,7 @@ export function TokenInsertToolbar({
   )
 
   const handleTokenSelect = (pt: PosType) => {
-    const word = wordsByPos[pt.id]?.[0] ?? pt.label
+    const word = wordsByPos[pt.id]?.[0] ?? pt.label ?? pt.code ?? '?'
     const t: SentenceToken = {
       index: 0,
       text: word,
@@ -128,7 +128,7 @@ export function TokenInsertToolbar({
                 className="w-full text-left px-3 py-1.5 text-sm hover:bg-gray-100 flex items-center gap-2"
                 style={{ borderLeft: `3px solid ${getPosTypeBackgroundColor(pt.color)}` }}
               >
-                {pt.label}
+                {pt.label ?? pt.code ?? `id:${pt.id}`}
               </button>
             ))}
             {!posTypes.length && (

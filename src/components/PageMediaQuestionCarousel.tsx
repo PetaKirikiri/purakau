@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { SentenceDisplay } from './SentenceDisplay'
-import type { PosPattern } from '../lib/patternMatch'
 import type { SentenceToken } from '../db/schema'
 import type { TokenSource } from '../lib/saveTokenPos'
 import { getTextFromTokens, isPunctuationOnlyToken } from '../lib/tokens'
@@ -204,7 +203,10 @@ export function PageMediaQuestionCarousel({
             sentenceId={current.id}
             tokenSource={tokenSource}
             posTypes={posTypes}
-            chunkPatterns={editor?.chunkPatterns ?? []}
+            chunkPatterns={(editor?.chunkPatterns ?? []).map((p) => ({
+              name: '',
+              sequence: p.sequence,
+            }))}
             connectorDesigns={editor?.connectorDesigns ?? []}
             patternStarProps={patternStarProps}
             onMakePhraseClick={editor ? () => editor.onMakePhraseClick(current.id) : undefined}

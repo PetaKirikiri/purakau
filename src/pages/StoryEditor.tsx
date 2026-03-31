@@ -371,6 +371,11 @@ export default function StoryEditor() {
     const seq = (r.pos_pattern as { sequence?: number[] })?.sequence
     return { name: r.name, sequence: Array.isArray(seq) ? seq : [] }
   })
+  const draftPhrasePatternsForToolbar = chunkPatternsRaw.map((p) => ({
+    id: p.id,
+    name: p.name,
+    pos_pattern: { sequence: (p.pos_pattern as { sequence?: number[] })?.sequence ?? [] },
+  }))
 
   const { data: sentencePatterns = [] } = useQuery({
     queryKey: ['sentence_patterns', id],
@@ -784,12 +789,13 @@ export default function StoryEditor() {
         .select('tokens_array, sentence_text, version_id, title_id')
         .eq('id', sentenceId)
         .single()
+      if (rowError) throw rowError
       const oldTokens: SentenceToken[] = Array.isArray(row?.tokens_array)
         ? (row.tokens_array as SentenceToken[])
         : getTokensFromSentence(row?.sentence_text ?? '')
       const newTokens = getTokensFromSentence(newText)
       const mergedTokens = mergeTokenPos(oldTokens, newTokens)
-      const { data: updData, error: updError } = await supabase
+      const { error: updError } = await supabase
         .from('story_sentences')
         .update({ sentence_text: newText, tokens_array: mergedTokens })
         .eq('id', sentenceId)
@@ -1369,7 +1375,7 @@ export default function StoryEditor() {
             return { ...s, tokens_array: newTokens }
           })
         : []
-      fetch('http://127.0.0.1:7489/ingest/b001ac32-8358-43d0-a2cd-b6f88c884101',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'5585d8'},body:JSON.stringify({sessionId:'5585d8',location:'StoryEditor.tsx:onAutoApplied',message:'cache optimistic update',data:{wordNorm,posTypeId,prevLen,sentencesChanged,bailedEarly:!prev?.length,key:[...(key as unknown[])]},timestamp:Date.now(),hypothesisId:'onAutoApplied'})}).catch(()=>{});
+      fetch('http://127.0.0.1:7489/ingest/b001ac32-8358-43d0-a2cd-b6f88c884101',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'5585d8'},body:JSON.stringify({sessionId:'5585d8',location:'StoryEditor.tsx:onAutoApplied',message:'cache optimistic update',data:{wordNorm,posTypeId,prevLen,sentencesChanged,bailedEarly:!prev?.length,key:[...key]},timestamp:Date.now(),hypothesisId:'onAutoApplied'})}).catch(()=>{});
       // #endregion
       if (!prev?.length) return
       queryClient.setQueryData(key, updated)
@@ -1894,7 +1900,7 @@ export default function StoryEditor() {
                           onAddToPage: () => processSourceMutation.mutate(draftTokens),
                           isAddToPagePending: processSourceMutation.isPending,
                           isAddToPageDisabled: !effectiveVersionId,
-                          phrasePatterns: chunkPatternsRaw,
+                          phrasePatterns: draftPhrasePatternsForToolbar,
                           sentencePatterns,
                           wordsByPos,
                         }}
