@@ -1,15 +1,26 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
   const navigate = useNavigate()
-  const { signIn, signUp } = useAuth()
+  const location = useLocation()
+  const state = location.state as { from?: string } | null | undefined
+  const redirectTo =
+    state?.from && state.from !== '/login' ? state.from : '/stories'
+  const { user, loading, signIn, signUp } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isSignUp, setIsSignUp] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
+
+  if (loading) {
+    return <div className="p-6 text-gray-600">Loading…</div>
+  }
+  if (user) {
+    return <Navigate to={redirectTo} replace />
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,7 +34,7 @@ export default function Login() {
       setError(err.message)
       return
     }
-    navigate('/')
+    navigate(redirectTo, { replace: true })
   }
 
   return (
