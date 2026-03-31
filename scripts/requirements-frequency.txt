@@ -1,0 +1,2 @@
+# Optional: for importing Apple Numbers (.numbers) frequency lists
+numbers-parser>=4.14.0

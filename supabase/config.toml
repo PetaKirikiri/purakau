@@ -1,0 +1,5 @@
+[functions.list-r2-images]
+verify_jwt = false
+
+[functions.te-aka-audio]
+verify_jwt = false
