@@ -22,7 +22,8 @@
     "test:jigsaw:verbose": "npx tsx src/lib/jigsawBoundaryCheck.ts --verbose",
     "test:jigsaw:json": "npx tsx src/lib/jigsawBoundaryCheck.ts --json",
     "import:freq": "node scripts/import-frequency-ranks.mjs",
-    "export:freq:json": "node scripts/export-frequency-numbers-json.mjs"
+    "export:freq:json": "node scripts/export-frequency-numbers-json.mjs",
+    "vercel:env:push": "node scripts/sync-env-to-vercel.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

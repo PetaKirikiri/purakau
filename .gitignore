@@ -25,3 +25,4 @@ local.db
 *.njsproj
 *.sln
 *.sw?
+.vercel
